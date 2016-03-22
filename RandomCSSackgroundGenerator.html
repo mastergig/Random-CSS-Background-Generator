@@ -1,0 +1,189 @@
+<!--Escreva o HTML aqui-->
+<html>
+	<head>
+		<style type='text/css'>
+			*{
+				margin: 0;
+				padding: 0;
+				font-family: tahoma;
+			}
+			input[type=button]{
+				margin: 0;
+				padding: 1px 10px;
+			}
+			body,html{
+				width: 100%;
+				height: 100%;
+				background: repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(0,0,0,0.1) 50px, rgba(0,0,0,0.1) 100px), rgba(255,255,255,1);
+			}
+			#title{
+				text-align: center;
+				font-size: 20px;
+				font-weight: bold;
+				font-family: Arial;
+				margin: 1% 0;
+			}
+			#test{
+				transition: all 0.3s;
+				
+				width: 80%;
+				height: 40%;
+				border: 1px solid;
+				margin: auto;
+			}
+			
+			#choose, #result{
+				float: left;
+				width: 45%;
+				margin: 2%;
+				text-align: center;
+			}
+			
+			#choose div{
+				margin: 15px 0;
+			}
+			
+			#choose{
+				border: solid 1px;
+				background: repeating-linear-gradient(transparent, transparent 25px, rgba(0,0,0,0.1) 25px, rgba(0,0,0,0.1) 50px), rgba(255,255,255,1);
+			}
+			
+			#cssOutput{
+				width: 80%;
+				height: 20%;
+				margin: 5% 0 0 0;
+			}
+		</style>
+		<script type='text/javascript'>
+			function randomize()
+			{
+				randomColor(0);
+				randomRotate(false);
+				randomLine(false);
+				updateBox();
+			}
+			function randomColor(id)
+			{
+				var R = 0;
+				var G = 0;
+				var B = 0;
+				
+				if(id == 1 || id == 0)
+				{
+					R = Math.floor((Math.random() * 256) + 0);
+					G = Math.floor((Math.random() * 256) + 0);
+					B = Math.floor((Math.random() * 256) + 0);
+				
+					cR.value = R;
+					cG.value = G;
+					cB.value = B;
+				}
+				
+				if(id == 2 || id == 0)
+				{
+					R = Math.floor((Math.random() * 256) + 0);
+					G = Math.floor((Math.random() * 256) + 0);
+					B = Math.floor((Math.random() * 256) + 0);
+					
+					sR.value = R;
+					sG.value = G;
+					sB.value = B;
+				}
+				
+				if(id != 0) updateBox();
+			}
+			
+			function randomRotate(solo)
+			{
+				var rot = 0;
+				rot = (Math.floor((Math.random() * 3600) + 0) / 10);
+				rotate.value = rot;
+				if(solo) updateBox();
+
+			}
+			
+			function randomLine(solo)
+			{
+				var linha = 0;
+				linha = Math.floor((Math.random() * 49) + 1);
+				size.value = linha;
+				if(solo) updateBox();
+			}
+			
+			function updateBox()
+			{
+				var R = cR.value;
+				var G = cG.value;
+				var B = cB.value;
+				var A = cA.value;
+				
+				var rgba = "rgba("+R+","+G+","+B+","+A+")";
+				
+				if(multi.checked)
+				{
+					R = sR.value;
+					G = sG.value;
+					B = sB.value;
+					A = sA.value;
+					
+					var rgba2 = "rgba("+R+","+G+","+B+","+A+")";
+					var rodo = "";
+					if(rotate.value != 0) rodo = rotate.value+"deg, ";
+					
+					if(degrade.checked)
+					{
+						rgba = "linear-gradient("+rodo+ rgba + ",";
+						rgba += rgba2 + ")";
+					}
+					else
+					{
+						var lSize = size.value;
+						rgba = "repeating-linear-gradient("+rodo+"transparent, transparent "+lSize +"px, "+ rgba2 + " "+lSize +"px, "+ rgba2 + " "+(2*lSize) +"px), " + rgba;
+					}
+				}
+				
+				test.style.background = rgba;
+				cssOutput.value = "background: " + rgba + ";";
+			}
+		</script>
+	</head>
+	
+	<body onload="randomize();">
+		<div id="title">Random CSS Background Generator</div>
+		<div id="choose">
+			<div id="choices">
+				<input type="radio" id="solid" onchange="updateBox()" name="solid" />Solid Color
+				<input type="radio" id="multi" onchange="updateBox()" name="solid" checked />MultiColor
+				<input type="radio" id="degrade" onchange="updateBox()" name="degrade" /> Degrade
+				<input type="radio" id="line" onchange="updateBox()" name="degrade" checked /> Lines
+			</div>
+			<div id="first">
+				First color<br/>
+				R: <input id="cR" type="number" onchange="updateBox()" min=0 max=255 step=1 value=0 />
+				G: <input id="cG" type="number" onchange="updateBox()" min=0 max=255 step=1 value=0 />
+				B: <input id="cB" type="number" onchange="updateBox()" min=0 max=255 step=1 value=0 />
+				A: <input id="cA" type="number" onchange="updateBox()" min=0 max=1 step=0.01 value=1 />
+				<br/><input type="button" value="Randomize Color 1" onclick="randomColor(1)" />
+			</div>
+			<div id="second">
+				Second color<br/>
+				R: <input id="sR" type="number" onchange="updateBox()" min=0 max=255 step=1 value=0 />
+				G: <input id="sG" type="number" onchange="updateBox()" min=0 max=255 step=1 value=0 />
+				B: <input id="sB" type="number" onchange="updateBox()" min=0 max=255 step=1 value=0 />
+				A: <input id="sA" type="number" onchange="updateBox()" min=0 max=1 step=0.01 value=1 />
+				<br/><input type="button" value="Randomize Color 2" onclick="randomColor(2)" />
+			</div>
+			<div id="other">
+				Other Options<br/>
+				Rotation: <input id="rotate" type="number" onchange="updateBox()" min=0 max=360 step=0.5 value=0 /><input type="button" value="Randomize Rotation" onclick="randomRotate(true)" /><br/>
+				Line Size: <input id="size" type="number" onchange="updateBox()" min=1 max=50 step=1 value=5 /><input type="button" value="Randomize Line Size" onclick="randomLine(true)" />
+			</div>
+		</div>
+		<div id="result">
+			<div id="test">
+			</div><br/>
+			<input id="random" type="button" value="Randomize All" onclick="randomize();" /><br/>
+			<textarea id="cssOutput"></textarea>
+		</div>
+	</body>
+</html>
